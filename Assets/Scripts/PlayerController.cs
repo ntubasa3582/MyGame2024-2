@@ -1,52 +1,49 @@
 using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent (typeof(Animator))]
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] CharacterControllerMoveMethod _moveMethod = CharacterControllerMoveMethod.Move;
     [SerializeField] float _speed = 3f;
     CharacterController _controller = default;
-    void Start()
+    Animator _animator;
+    void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        dir = Camera.main.transform.TransformDirection(dir);
-        dir.y = 0;
-        _controller.Move(dir.normalized * _speed * Time.deltaTime);
-        Vector3 vector = new Vector3(dir.x,dir.y,dir.z) * _speed * Time.deltaTime;
-        var position = transform.position + vector;
-        //switch (_moveMethod)
-        //{
-        //    case CharacterControllerMoveMethod.Move:
-
-        //        //if (_controller.isGrounded)
-        //        //{
-        //        //    Debug.Log("接地しています");
-        //        //}
-        //        //else
-        //        //{
-        //        //    Debug.Log("接地していません");
-        //        //}
-
-        //        break;
-        //    case CharacterControllerMoveMethod.SimpleMove:
-        //        _controller.SimpleMove(dir.normalized * _speed);
-        //        break;
-        //    default:
-        //        break;
-        //}
-        transform.LookAt(position);
+        Vector3 pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")); //キー入力の値を変数に入れる
+        PlayerMove(pos);
+        if (Input.GetKey("w")|| Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
+        {
+            _animator.Play("Walk");
+        }
+        else
+        {
+            _animator.SetBool("IsWalk", true);
+            _animator.Play("Idle");
+            _animator.SetBool("IsWalk", false);
+        }
     }
 
-    enum CharacterControllerMoveMethod
+    void PlayerMove(Vector3 dir)
     {
-        /// <summary>Move メソッドを使う</summary>
-        Move,
-        /// <summary>SimpleMove メソッドを使う</summary>
-        SimpleMove,
+        dir = Camera.main.transform.TransformDirection(dir);
+        dir = dir.normalized * _speed * Time.deltaTime;
+        dir.y = 0;
+        _controller.Move(dir);
+        var position = transform.position + dir;
+        //if (_controller.isGrounded)
+        //{
+        //    Debug.Log("接地しています");
+        //}
+        //else
+        //{
+        //    Debug.Log("接地していません");
+        //}
+        transform.LookAt(position);
     }
 }
