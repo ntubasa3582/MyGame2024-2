@@ -1,49 +1,32 @@
 using UnityEngine;
-[RequireComponent(typeof(CharacterController))]
-[RequireComponent (typeof(Animator))]
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float _speed = 3f;
-    CharacterController _controller = default;
-    Animator _animator;
+    [SerializeField] float _jumpParameter = 1f;
+    Rigidbody _rb;
+    Vector3 _pos;
     void Awake()
     {
-        _controller = GetComponent<CharacterController>();
-        _animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        Vector3 pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")); //キー入力の値を変数に入れる
-        PlayerMove(pos);
-        if (Input.GetKey("w")|| Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
+        _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")); //キー入力の値を変数に入れる
+        if (_pos.magnitude > 0 )
         {
-            _animator.Play("Walk");
-        }
-        else
-        {
-            _animator.SetBool("IsWalk", true);
-            _animator.Play("Idle");
-            _animator.SetBool("IsWalk", false);
-        }
-    }
+            _pos = Camera.main.transform.TransformDirection(_pos);
+            _pos.y = 0;
+            transform.LookAt(transform.position + _pos);
 
-    void PlayerMove(Vector3 dir)
-    {
-        dir = Camera.main.transform.TransformDirection(dir);
-        dir = dir.normalized * _speed * Time.deltaTime;
-        dir.y = 0;
-        _controller.Move(dir);
-        var position = transform.position + dir;
-        //if (_controller.isGrounded)
-        //{
-        //    Debug.Log("接地しています");
-        //}
-        //else
-        //{
-        //    Debug.Log("接地していません");
-        //}
-        transform.LookAt(position);
+            float verticalVelocity = _rb.velocity.y;
+            _rb.velocity = _pos.normalized * _speed + Vector3.up * verticalVelocity;
+        }
+        if (Input.GetButtonDown("Jump"))
+        {
+            _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
+        }
+        Cursor.visible = false;
     }
 }
