@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _jumpParameter = 1f;
     Rigidbody _rb = default;
     Vector3 _pos = default;
-    readonly int _effectCount = 0;                                          //エフェクトの順番をカウントする変数
+    int _effectCount = 0;                                          //エフェクトの順番をカウントする変数
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));    //プレイヤーの移動処理
         if (_pos.magnitude > 0 )
-        {
+        { 
             _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
             _pos.y = 0;
             transform.LookAt(transform.position + _pos);
@@ -35,7 +35,25 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))   //エフェクトを生成する
         {
-            Instantiate(_effects[_effectCount], _effectInstancePos.transform.position, Quaternion.identity);
+            Quaternion effectEuler;
+            if (_effectCount == 0)
+            {
+                effectEuler = Quaternion.Euler(0, this.transform.rotation.eulerAngles.y, 0);
+            }
+            else
+            {
+               effectEuler = Quaternion.Euler(-90, this.transform.rotation.eulerAngles.y, 0);
+            }
+
+            Instantiate(_effects[_effectCount], _effectInstancePos.transform.position, effectEuler);
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            _effectCount++;
+            if (_effectCount >= _effects.Count)
+            {
+                _effectCount = 0;
+            }
         }
 
         Cursor.visible = false;
