@@ -81,3 +81,5 @@ Assets/Hovl Studio/Resources/Settings/PP low.asset
 Assets/JMO Assets/
 Assets/Plugins/Demigiant/DOTween/
 Assets/Resources/DOTweenSettings.asset
+*.mat
+Assets/FROOD/

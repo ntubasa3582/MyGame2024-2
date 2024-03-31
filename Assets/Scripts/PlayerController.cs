@@ -18,15 +18,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));    //プレイヤーの移動処理
-        if (_pos.magnitude > 0 )
-        { 
-            _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
-            _pos.y = 0;
-            transform.LookAt(transform.position + _pos);
+        _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
+        _pos.y = 0;
+        transform.LookAt(transform.position + _pos);
 
-            float verticalVelocity = _rb.velocity.y;
-            _rb.velocity = _pos.normalized * _speed + Vector3.up * verticalVelocity;
-        }
+        float verticalVelocity = _rb.velocity.y;
+        _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
+
 
         if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
         {
@@ -42,7 +40,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-               effectEuler = Quaternion.Euler(-90, this.transform.rotation.eulerAngles.y, 0);
+                effectEuler = Quaternion.Euler(-90, this.transform.rotation.eulerAngles.y, 0);
             }
 
             Instantiate(_effects[_effectCount], _effectInstancePos.transform.position, effectEuler);
