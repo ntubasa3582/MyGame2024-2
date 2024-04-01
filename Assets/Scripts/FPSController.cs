@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FPSController : MonoBehaviour
 {
-    [SerializeField] GameObject cam;    //カメラ
+    [SerializeField] GameObject _camera;    //カメラ
     [SerializeField] GameObject _bullet;//銃口
     Vector3 _pos = default;
     Quaternion cameraRot, characterRot;
@@ -12,7 +12,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
     float x, z;
-
+    bool _isGround = true;
     bool cursorLock = true;
 
     //変数の宣言(角度の制限用)
@@ -22,7 +22,7 @@ public class FPSController : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        cameraRot = cam.transform.localRotation;
+        cameraRot = _camera.transform.localRotation;
         characterRot = transform.localRotation;
     }
 
@@ -38,21 +38,27 @@ public class FPSController : MonoBehaviour
         //Updateの中で作成した関数を呼ぶ
         cameraRot = ClampRotation(cameraRot);
 
-        cam.transform.localRotation = cameraRot;
+        _camera.transform.localRotation = cameraRot;
         transform.localRotation = characterRot;
 
-
         UpdateCursorLock();
-        if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
+        if (_isGround )
         {
-            _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
+            if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
+            {
+                _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
+                _isGround = false;
+            }
         }
 
         if (Input.GetMouseButtonDown(0))
         {
             GameObject ball = (GameObject)Instantiate(_projectiles, _bullet.transform.position, Quaternion.identity);
             Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
-            ballRigidbody.AddForce(transform.forward * 10000);
+            Vector3 vector3 = _bullet.transform.position - transform.position;
+            vector3.y = _camera.transform.rotation.x * -10;
+            Debug.Log(vector3.y);
+            ballRigidbody.AddForce(vector3 * 500);
         }
     }
 
@@ -113,5 +119,11 @@ public class FPSController : MonoBehaviour
         return q;
     }
 
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            _isGround = true;
+        }
+    }
 }
