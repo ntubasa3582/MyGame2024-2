@@ -2,15 +2,32 @@ using UnityEngine;
 
 public class ProjectilesController : MonoBehaviour
 {
-    [SerializeField]GameObject _player = default;
+    [SerializeField] float _lifeTime = 5;
+    ScoreManager _scoreManager;
+    float _timer = 0;
     void Start()
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
-        Vector3 force = new Vector3(0.0f, 90.0f, 1.0f);
-        rb.AddForce(force, ForceMode.Impulse);
     }
     void Update()
     {
-        
+        _timer += Time.deltaTime;   //一定時間したらデストロイする
+        if (_timer > _lifeTime)
+        {
+            ThisDestroy();
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")    //敵に触れたらスコアを1増やしてデストロイする
+        {
+            _scoreManager = GameObject.FindObjectOfType<ScoreManager>();
+            _scoreManager.AddScore(1);
+            Destroy(other.gameObject);
+            ThisDestroy();
+        }
+    }
+    void ThisDestroy()
+    {
+        Destroy(gameObject);
     }
 }
