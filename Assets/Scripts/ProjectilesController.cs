@@ -3,7 +3,7 @@ using UnityEngine;
 public class ProjectilesController : MonoBehaviour
 {
     [SerializeField] float _lifeTime = 5;
-    ScoreManager _scoreManager;
+    ClearSystem _scoreManager;
     float _timer = 0;
     void Start()
     {
@@ -20,9 +20,6 @@ public class ProjectilesController : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")    //敵に触れたらスコアを1増やしてデストロイする
         {
-            _scoreManager = GameObject.FindObjectOfType<ScoreManager>();
-            _scoreManager.AddScore(1);
-            Destroy(other.gameObject);
             ThisDestroy();
         }
     }

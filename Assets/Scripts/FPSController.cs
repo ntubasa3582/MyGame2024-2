@@ -57,7 +57,7 @@ public class FPSController : MonoBehaviour
             Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
             Vector3 vector3 = _bullet.transform.position - transform.position;
             vector3.y = _camera.transform.rotation.x * -10;
-            ballRigidbody.AddForce(vector3 * 500);
+            ballRigidbody.AddForce(vector3 * 1000);
         }
     }
 
