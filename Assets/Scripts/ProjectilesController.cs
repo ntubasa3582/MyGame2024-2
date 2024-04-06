@@ -3,6 +3,7 @@ using UnityEngine;
 public class ProjectilesController : MonoBehaviour
 {
     [SerializeField] float _lifeTime = 5;
+    public float _enemyDamage = 0;
     ClearSystem _scoreManager;
     float _timer = 0;
     void Start()
@@ -18,7 +19,7 @@ public class ProjectilesController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")    //敵に触れたらスコアを1増やしてデストロイする
+        if (other.gameObject.tag == "Enemy")    //敵に触れたらHPを減らしてデストロイする
         {
             ThisDestroy();
         }

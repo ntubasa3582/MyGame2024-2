@@ -13,7 +13,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
     float x, z;
     bool _isGround = true;
-    bool cursorLock = true;
+    bool cursorLock = false;
 
     //変数の宣言(角度の制限用)
     float minX = -90f, maxX = 90f;
@@ -81,21 +81,23 @@ public class FPSController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            cursorLock = false;
+            cursorLock = !cursorLock;
         }
-        else if (Input.GetMouseButton(0))
-        {
-            cursorLock = true;
-        }
+        //else if (Input.GetMouseButton(0))
+        //{
+        //    cursorLock = true;
+        //}
 
 
         if (cursorLock)
         {
             Cursor.lockState = CursorLockMode.Locked;
+            Debug.Log(1);
         }
         else if (!cursorLock)
         {
             Cursor.lockState = CursorLockMode.None;
+            Debug.Log(2);
         }
     }
 
