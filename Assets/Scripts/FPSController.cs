@@ -2,23 +2,30 @@ using UnityEngine;
 
 public class FPSController : MonoBehaviour
 {
+    PauseGame _pauseGame;
     [SerializeField] GameObject _camera;    //カメラ
-    [SerializeField] GameObject _bullet;//銃口
+    [SerializeField] GameObject _muzzle;//銃口
+    [SerializeField] GameObject[] _bullets;   //投げるオブジェクト
     Vector3 _pos = default;
     Quaternion cameraRot, characterRot;
     Rigidbody _rb;
-    [SerializeField] GameObject _projectiles;   //投げるオブジェクト
     [SerializeField] float _jumpParameter = 1.0f;   //ジャンプのパラメータ
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
+    int _bulletCount = 0;
     float x, z;
-    bool _isGround = true;
-    bool cursorLock = false;
+    bool _isGround = true;  //着地判定
+    bool cursorLock = true; //マウスカーソルの視認を切り替える
+    bool _isPlayerMove = false; //プレイヤーの移動を制限する
 
     //変数の宣言(角度の制限用)
     float minX = -90f, maxX = 90f;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        _pauseGame = FindAnyObjectByType<PauseGame>();
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -26,54 +33,87 @@ public class FPSController : MonoBehaviour
         characterRot = transform.localRotation;
     }
 
+    private void OnEnable()
+    {
+        //デリゲート登録
+        _pauseGame.OnPauseResume += PauseResume;
+    }
+
+    private void OnDisable()
+    {
+        //デリゲート解除
+        _pauseGame.OnPauseResume -= PauseResume;
+    }
+
+    void PauseResume(bool isPause)
+    {
+        //オブジェクトのセットアクティブを切り替える
+        if (isPause)
+        {
+            _isPlayerMove = true;
+            Cursor.lockState = CursorLockMode.None;
+
+        }
+        else
+        {
+            _isPlayerMove = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        float xRot = Input.GetAxis("Mouse X") * Ysensityvity;
-        float yRot = Input.GetAxis("Mouse Y") * Xsensityvity;
-
-        cameraRot *= Quaternion.Euler(-yRot, 0, 0);
-        characterRot *= Quaternion.Euler(0, xRot, 0);
-
-        //Updateの中で作成した関数を呼ぶ
-        cameraRot = ClampRotation(cameraRot);
-
-        _camera.transform.localRotation = cameraRot;
-        transform.localRotation = characterRot;
-
-        UpdateCursorLock();
-        if (_isGround )
+        if (!_isPlayerMove)
         {
-            if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
+            float xRot = Input.GetAxis("Mouse X") * Ysensityvity;
+            float yRot = Input.GetAxis("Mouse Y") * Xsensityvity;
+
+            cameraRot *= Quaternion.Euler(-yRot, 0, 0);
+            characterRot *= Quaternion.Euler(0, xRot, 0);
+
+            //Updateの中で作成した関数を呼ぶ
+            cameraRot = ClampRotation(cameraRot);
+
+            _camera.transform.localRotation = cameraRot;
+            transform.localRotation = characterRot;
+
+            UpdateCursorLock();
+            if (_isGround)
             {
-                _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
-                _isGround = false;
+                if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
+                {
+                    _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
+                    _isGround = false;
+                }
             }
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            GameObject ball = (GameObject)Instantiate(_projectiles, _bullet.transform.position, Quaternion.identity);
-            Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
-            Vector3 vector3 = _bullet.transform.position - transform.position;
-            vector3.y = _camera.transform.rotation.x * -10;
-            ballRigidbody.AddForce(vector3 * 1000);
+            if (Input.GetMouseButtonDown(0))
+            {
+                GameObject ball = (GameObject)Instantiate(_bullets[_bulletCount], _muzzle.transform.position, Quaternion.identity);
+                Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
+                Vector3 vector3 = _muzzle.transform.position - transform.position;
+                vector3.y = _camera.transform.rotation.x * -10;
+                ballRigidbody.AddForce(vector3 * 1000);
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                BulletCountUp(1);
+                Debug.Log(_bulletCount);
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        //x = 0;
-        //z = 0;
-
-        //x = Input.GetAxisRaw("Horizontal") * speed;
-        //z = Input.GetAxisRaw("Vertical") * speed;
-        //transform.position += cam.transform.forward * z + cam.transform.right * x;
-        _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));    //プレイヤーの移動処理
-        _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
-        _pos.y = 0;
-        float verticalVelocity = _rb.velocity.y;
-        _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
+        if (!_isPlayerMove)
+        {
+            _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));    //プレイヤーの移動処理
+            _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
+            _pos.y = 0;
+            float verticalVelocity = _rb.velocity.y;
+            _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
+        }
     }
 
 
@@ -91,13 +131,9 @@ public class FPSController : MonoBehaviour
 
         if (cursorLock)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log(1);
         }
         else if (!cursorLock)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Debug.Log(2);
         }
     }
 
@@ -118,6 +154,11 @@ public class FPSController : MonoBehaviour
         q.x = Mathf.Tan(angleX * Mathf.Deg2Rad * 0.5f);
 
         return q;
+    }
+
+    public void BulletCountUp(int CountUp)
+    {
+        _bulletCount += CountUp;
     }
 
     private void OnCollisionEnter(Collision collision)

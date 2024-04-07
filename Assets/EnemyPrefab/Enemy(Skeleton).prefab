@@ -1668,9 +1668,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1a69d3f6b70a841ab25728a30f420f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hpSlider: {fileID: 720226372131916740}
   _hp: 1
   _moveSpeed: 0.01
-  _hpSlider: {fileID: 720226372131916740}
+  _deathGetMoney: 1
 --- !u!1 &8147471540022445331
 GameObject:
   m_ObjectHideFlags: 0
