@@ -6,7 +6,7 @@ public class PausePanelController : MonoBehaviour
     PauseGame _pauseGame;
     void Awake()
     {
-        _pauseGame = FindAnyObjectByType<PauseGame>(); 
+        _pauseGame = FindAnyObjectByType<PauseGame>();
         _pausePanel.SetActive(false);
     }
 

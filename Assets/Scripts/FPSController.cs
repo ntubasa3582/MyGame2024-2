@@ -13,9 +13,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
     int _bulletCount = 0;
-    float x, z;
     bool _isGround = true;  //着地判定
-    bool cursorLock = true; //マウスカーソルの視認を切り替える
     bool _isPlayerMove = false; //プレイヤーの移動を制限する
 
     //変数の宣言(角度の制限用)
@@ -46,8 +44,7 @@ public class FPSController : MonoBehaviour
     }
 
     void PauseResume(bool isPause)
-    {
-        //オブジェクトのセットアクティブを切り替える
+    {   //マウスカーソルの表示と非表示を切り替える  
         if (isPause)
         {
             _isPlayerMove = true;
@@ -61,7 +58,6 @@ public class FPSController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!_isPlayerMove)
@@ -78,7 +74,6 @@ public class FPSController : MonoBehaviour
             _camera.transform.localRotation = cameraRot;
             transform.localRotation = characterRot;
 
-            UpdateCursorLock();
             if (_isGround)
             {
                 if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
@@ -88,7 +83,7 @@ public class FPSController : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))    //右クリックで弾を撃つ
             {
                 GameObject ball = (GameObject)Instantiate(_bullets[_bulletCount], _muzzle.transform.position, Quaternion.identity);
                 Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
@@ -96,11 +91,11 @@ public class FPSController : MonoBehaviour
                 vector3.y = _camera.transform.rotation.x * -10;
                 ballRigidbody.AddForce(vector3 * 1000);
             }
-            if (Input.GetMouseButtonDown(1))
-            {
-                BulletCountUp(1);
-                Debug.Log(_bulletCount);
-            }
+            //if (Input.GetMouseButtonDown(1))    //左クリックで撃つ弾を切り替える
+            //{
+            //    BulletCountUp(1);
+            //    Debug.Log(_bulletCount);
+            //}
         }
     }
 
@@ -113,27 +108,6 @@ public class FPSController : MonoBehaviour
             _pos.y = 0;
             float verticalVelocity = _rb.velocity.y;
             _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
-        }
-    }
-
-
-    public void UpdateCursorLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            cursorLock = !cursorLock;
-        }
-        //else if (Input.GetMouseButton(0))
-        //{
-        //    cursorLock = true;
-        //}
-
-
-        if (cursorLock)
-        {
-        }
-        else if (!cursorLock)
-        {
         }
     }
 
