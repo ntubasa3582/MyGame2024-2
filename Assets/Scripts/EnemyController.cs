@@ -75,5 +75,9 @@ public class EnemyController : MonoBehaviour
             _hp -= projectiles._enemyDamage;
             _hpSlider.DOValue(_hp,0.2f);
         }
+        if (other.gameObject.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 }
