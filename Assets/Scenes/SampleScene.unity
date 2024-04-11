@@ -1157,7 +1157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemy: {fileID: 472475261260945425, guid: daecb2aca16bc9242b783c395bf79f77, type: 3}
-  _spawnInterval: 5
+  _spawnInterval: 3
 --- !u!1 &1510495735
 GameObject:
   m_ObjectHideFlags: 0
