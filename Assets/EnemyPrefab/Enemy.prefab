@@ -240,7 +240,7 @@ MonoBehaviour:
   _hpSlider: {fileID: 8799579520650411449}
   _hp: 5
   _moveSpeed: 0.01
-  _deathGetMoney: 0
+  _deathGetMoney: 1
 --- !u!1 &744798408825643974
 GameObject:
   m_ObjectHideFlags: 0
