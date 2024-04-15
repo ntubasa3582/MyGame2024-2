@@ -91,11 +91,6 @@ public class FPSController : MonoBehaviour
                 vector3.y = _camera.transform.rotation.x * -10;
                 ballRigidbody.AddForce(vector3 * 1000);
             }
-            //if (Input.GetMouseButtonDown(1))    //左クリックで撃つ弾を切り替える
-            //{
-            //    BulletCountUp(1);
-            //    Debug.Log(_bulletCount);
-            //}
         }
     }
 
@@ -132,6 +127,7 @@ public class FPSController : MonoBehaviour
 
     public void BulletCountUp(int CountUp)
     {
+        //弾の種類を変更するMethod
         _bulletCount += CountUp;
     }
 

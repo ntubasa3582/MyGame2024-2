@@ -57,7 +57,7 @@ public class EnemyController : MonoBehaviour
         if (_hp <= 0 && _hpSlider.value <= 0)
         {
             _moneyCounter = GameObject.FindAnyObjectByType<MoneyCounter>();
-            _moneyCounter.AddMoney(_deathGetMoney);
+            _moneyCounter.MoneyValueChange(_deathGetMoney);
             Destroy(gameObject);
         }
         if (!_enemyMoveStop)
