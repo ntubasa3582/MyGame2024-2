@@ -7,7 +7,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] Slider _hpSlider;      //エネミーのHpを表示するスライダー
     [SerializeField] float _hp;             //エネミーのHpの値
-    [SerializeField] float _moveSpeed;      //エネミーの移動スピード
+    //[SerializeField] float _moveSpeed;      //エネミーの移動スピード
     [SerializeField] int _deathGetMoney = 0;//エネミー死亡時に取得できる金の数
     PauseGame _pauseGame;
     EnemySpawnController _enemySpawnController;

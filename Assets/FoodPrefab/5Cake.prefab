@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7080578916549751548}
   - component: {fileID: 4610861830224012831}
   m_Layer: 0
-  m_Name: Cake
+  m_Name: 5Cake
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 5
-  _enemyDamage: 5
+  _enemyDamage: 500
 --- !u!54 &7080578916549751548
 Rigidbody:
   m_ObjectHideFlags: 0
