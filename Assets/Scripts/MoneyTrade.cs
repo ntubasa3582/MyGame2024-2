@@ -4,13 +4,29 @@ using UnityEngine;
 public class MoneyTrade : MonoBehaviour
 {
     MoneyCounter _moneyCounter;
-    List<int> _consumeMoney = new List<int>();  //何番目と取引しているかを記録するカウント
+    FPSController _fpsController;
+    [SerializeField] List<int> _bulletBuyPrice = new List<int>();   //弾を交換する時に必要な金の量を入れる変数
+
+
+    int[] _consumeMoney = new int[1];  //何番目と取引しているかを記録するカウント
+    //0 _bulletBuyPriceのカウント
     void Awake()
     {
         _moneyCounter = GameObject.FindAnyObjectByType<MoneyCounter>();
+        _fpsController = GameObject.FindAnyObjectByType<FPSController>();
+        foreach (int item in _consumeMoney)
+        {
+            _consumeMoney[item] = 0;
+        }
     }
-    void Update()
+
+    public void BulletUpGrade() //プレイヤーが撃つ弾のグレードを上げるための処理を書くメソッド
     {
-        
+        if (_moneyCounter._money >= _bulletBuyPrice[_consumeMoney[0]])
+        {
+            _moneyCounter.MoneyValueChange(-_bulletBuyPrice[_consumeMoney[0]]); //_moneyを_bulletBuyPrice分マイナスする
+            _consumeMoney[0] += 1;  //カウントを1増やす
+            _fpsController.BulletCountUp(_consumeMoney[0]); //bulletのカウントを1増やしてアップグレードする
+        }
     }
 }

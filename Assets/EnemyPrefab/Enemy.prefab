@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpSlider: {fileID: 8799579520650411449}
-  _hp: 5
+  _hp: 1
   _moveSpeed: 0.01
   _deathGetMoney: 1
 --- !u!1 &744798408825643974
@@ -1234,7 +1234,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6762805351389674091}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.52, y: 3.16, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1242,7 +1242,7 @@ RectTransform:
   - {fileID: 6818219372871370426}
   - {fileID: 7665329130957160670}
   m_Father: {fileID: 7411541061464117077}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 13.6}

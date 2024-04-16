@@ -87,8 +87,7 @@ public class FPSController : MonoBehaviour
             {
                 GameObject ball = (GameObject)Instantiate(_bullets[_bulletCount], _muzzle.transform.position, Quaternion.identity);
                 Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
-                Vector3 vector3 = _muzzle.transform.position - transform.position;
-                vector3.y = _camera.transform.rotation.x * -10;
+                Vector3 vector3 = _muzzle.transform.position - _camera.transform.position;
                 ballRigidbody.AddForce(vector3 * 1000);
             }
         }
@@ -128,7 +127,7 @@ public class FPSController : MonoBehaviour
     public void BulletCountUp(int CountUp)
     {
         //íeÇÃéÌóﬁÇïœçXÇ∑ÇÈMethod
-        _bulletCount += CountUp;
+        _bulletCount = CountUp;
     }
 
     private void OnCollisionEnter(Collision collision)
