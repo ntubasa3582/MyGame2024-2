@@ -6,14 +6,14 @@ public class FPSController : MonoBehaviour
     [SerializeField] GameObject _camera;    //カメラ
     [SerializeField] GameObject _muzzle;//銃口
     [SerializeField] GameObject[] _bullets;   //投げるオブジェクト
-    Vector3 _pos = default;
+    //Vector3 _pos = default;
     Quaternion cameraRot, characterRot;
-    Rigidbody _rb;
-    [SerializeField] float _jumpParameter = 1.0f;   //ジャンプのパラメータ
+    //Rigidbody _rb;
+    //[SerializeField] float _jumpParameter = 1.0f;   //ジャンプのパラメータ
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
-    [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
+    //[SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
     int _bulletCount = 0;
-    bool _isGround = true;  //着地判定
+    //bool _isGround = true;  //着地判定
     bool _isPlayerMove = false; //プレイヤーの移動を制限する
 
     //変数の宣言(角度の制限用)
@@ -26,7 +26,7 @@ public class FPSController : MonoBehaviour
     }
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
+        //_rb = GetComponent<Rigidbody>();
         cameraRot = _camera.transform.localRotation;
         characterRot = transform.localRotation;
     }
@@ -74,14 +74,14 @@ public class FPSController : MonoBehaviour
             _camera.transform.localRotation = cameraRot;
             transform.localRotation = characterRot;
 
-            if (_isGround)
-            {
-                if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
-                {
-                    _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
-                    _isGround = false;
-                }
-            }
+            //if (_isGround)
+            //{
+            //    if (Input.GetButtonDown("Jump"))    //プレイヤーのジャンプ処理
+            //    {
+            //        _rb.velocity = new Vector3(_rb.velocity.x, _jumpParameter, _rb.velocity.z);
+            //        _isGround = false;
+            //    }
+            //}
 
             if (Input.GetMouseButtonDown(0))    //右クリックで弾を撃つ
             {
@@ -95,14 +95,15 @@ public class FPSController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isPlayerMove)
-        {
-            _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));    //プレイヤーの移動処理
-            _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
-            _pos.y = 0;
-            float verticalVelocity = _rb.velocity.y;
-            _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
-        }
+        //if (!_isPlayerMove)
+        //{
+        //    //プレイヤーの移動処理
+        //    _pos = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        //    _pos = Camera.main.transform.TransformDirection(_pos);  //カメラからの角度で座標に変換する
+        //    _pos.y = 0;
+        //    float verticalVelocity = _rb.velocity.y;
+        //    _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
+        //}
     }
 
     //角度制限関数の作成
@@ -128,13 +129,5 @@ public class FPSController : MonoBehaviour
     {
         //弾の種類を変更するMethod
         _bulletCount = CountUp;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            _isGround = true;
-        }
     }
 }

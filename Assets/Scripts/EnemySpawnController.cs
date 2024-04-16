@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class EnemySpawnController : MonoBehaviour
 {
+    //エネミーの生成を管理するスクリプト
     PauseGame _pauseGame;
     [SerializeField] GameObject _enemy = default;
-    [SerializeField] float _spawnInterval = 0;
+    [SerializeField] Vector2 _xpos;
+    [SerializeField] Vector2 _ypos;
+    Vector3 _randomPos = default;
+    //[SerializeField] float _spawnInterval = 0;
     bool _timerStop = false;
-    float _timer = 0;
+    //float _timer = 0;
+    bool _spawnSwitch = true;
     void Awake()
     {
         _pauseGame = FindAnyObjectByType<PauseGame>();
@@ -41,17 +46,30 @@ public class EnemySpawnController : MonoBehaviour
     {
         if (!_timerStop)
         {
-            _timer += Time.deltaTime;
-            if (_timer > _spawnInterval)
+            if (_spawnSwitch)
             {
-                _timer = 0;
-                Instantiate(_enemy, transform.position, Quaternion.identity);
+                //_timer = 0;
+                RandomPos();
+                Instantiate(_enemy, _randomPos, Quaternion.identity);
+                _spawnSwitch = false;
+                //_timer += Time.deltaTime;
+                //if (_timer > _spawnInterval)
+                //{
+                //}
             }
         }
     }
 
-    public void intervalSet(float interval)
+    public void SpawnSwitchChange()
     {
-        _spawnInterval = interval;
+        _spawnSwitch = true;
+    }
+
+    public void RandomPos()
+    {
+        _randomPos.x = Random.Range(_xpos.x, _xpos.y);
+        _randomPos.y = Random.Range(_ypos.x, _ypos.y);
+        Debug.Log(_randomPos);
+        _randomPos = new Vector3(_randomPos.x,_randomPos.y,16.6f);
     }
 }

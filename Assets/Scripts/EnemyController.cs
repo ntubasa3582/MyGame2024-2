@@ -10,19 +10,21 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float _moveSpeed;      //エネミーの移動スピード
     [SerializeField] int _deathGetMoney = 0;//エネミー死亡時に取得できる金の数
     PauseGame _pauseGame;
+    EnemySpawnController _enemySpawnController;
     MoneyCounter _moneyCounter;
     GameObject _player;
     Animator _animator;
-    bool _enemyMoveStop = false;
+    //bool _enemyMoveStop = false;
     private void Awake()
     {
         _pauseGame = FindAnyObjectByType<PauseGame>();
         _animator = GetComponent<Animator>();
+        _enemySpawnController = GameObject.FindAnyObjectByType<EnemySpawnController>();
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
     private void Start()
     {
         _hpSlider.maxValue = _hp;
-        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnEnable()
@@ -42,12 +44,10 @@ public class EnemyController : MonoBehaviour
         //エネミーの動きを止める
         if (isPause)
         {
-            _enemyMoveStop = true;
             _animator.speed = 0;
         }
         else
         {
-            _enemyMoveStop = false;
             _animator.speed = 1;
         }
     }
@@ -58,13 +58,15 @@ public class EnemyController : MonoBehaviour
         {
             _moneyCounter = GameObject.FindAnyObjectByType<MoneyCounter>();
             _moneyCounter.MoneyValueChange(_deathGetMoney);
+            _enemySpawnController.SpawnSwitchChange();
             Destroy(gameObject);
         }
-        if (!_enemyMoveStop)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _moveSpeed);
-            transform.LookAt(_player.transform.position);
-        }
+        transform.LookAt(_player.transform.position);
+        //if (!_enemyMoveStop)
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _moveSpeed);
+        //    transform.LookAt(_player.transform.position);
+        //}
     }
     private void OnTriggerEnter(Collider other)
     {
