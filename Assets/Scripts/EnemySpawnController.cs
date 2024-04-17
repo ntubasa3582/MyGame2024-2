@@ -50,7 +50,7 @@ public class EnemySpawnController : MonoBehaviour
             {
                 //_timer = 0;
                 RandomPos();
-                Instantiate(_enemy, _randomPos, Quaternion.identity);
+                Instantiate(_enemy, transform.position, Quaternion.identity);
                 _spawnSwitch = false;
                 //_timer += Time.deltaTime;
                 //if (_timer > _spawnInterval)
@@ -69,7 +69,7 @@ public class EnemySpawnController : MonoBehaviour
     {
         _randomPos.x = Random.Range(_xpos.x, _xpos.y);
         _randomPos.y = Random.Range(_ypos.x, _ypos.y);
-        Debug.Log(_randomPos);
         _randomPos = new Vector3(_randomPos.x,_randomPos.y,16.6f);
     }
 }
+ 
