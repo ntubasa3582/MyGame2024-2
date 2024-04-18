@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,10 +71,10 @@ public class EnemyController : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            ProjectilesController projectiles = default;
-            projectiles = other.gameObject.GetComponent<ProjectilesController>();
-            _hp -= projectiles._enemyDamage;
-            _hpSlider.DOValue(_hp,0.2f);
+            BulletController _bullet = default;
+            _bullet = other.gameObject.GetComponent<BulletController>();
+            _hp -= _bullet._enemyDamage;
+            _hpSlider.DOValue(_hp, 0.2f);
         }
         if (other.gameObject.tag == "Player")
         {

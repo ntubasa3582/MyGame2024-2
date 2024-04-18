@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class ProjectilesController : MonoBehaviour
+public class BulletController : MonoBehaviour
 {
     PauseGame _pauseGame;
     Rigidbody _rigidbody;
+    MoneyCounter _moneyCounter;
     Vector3 _angularVelocity;
     Vector3 _velocity;
     [SerializeField] float _lifeTime = 5;
