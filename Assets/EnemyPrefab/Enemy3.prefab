@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hpSlider: {fileID: 1205286917087447276}
   _hp: 500
-  _deathGetMoney: 0
+  _deathGetMoney: 500
 --- !u!1 &1144892971995816105
 GameObject:
   m_ObjectHideFlags: 0
