@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 5
-  _enemyDamage: 25
+  _enemyDamage: 2
 --- !u!54 &6769217228596876508
 Rigidbody:
   m_ObjectHideFlags: 0

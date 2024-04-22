@@ -4,6 +4,7 @@ public class FPSController : MonoBehaviour
 {
     MoneyTrade _moneyTrade;
     PauseGame _pauseGame;
+    MoneyCounter _moneyCounter;
     [SerializeField] GameObject _camera;    //カメラ
     [SerializeField] GameObject _muzzle;//銃口
     [SerializeField] GameObject[] _bullets;   //投げるオブジェクト
@@ -13,16 +14,22 @@ public class FPSController : MonoBehaviour
     //[SerializeField] float _jumpParameter = 1.0f;   //ジャンプのパラメータ
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
+    [SerializeField] GameObject[] _hpText = new GameObject[3];
     //bool _isGround = true;  //着地判定
     bool _isPlayerMove = false; //プレイヤーの移動を制限する
 
+    int _playerHp = 0;
+
     //変数の宣言(角度の制限用)
     float minX = -90f, maxX = 90f;
+
+    bool _slowClick = false;
 
     private void Awake()
     {
         _pauseGame = FindAnyObjectByType<PauseGame>();
         _moneyTrade = FindAnyObjectByType<MoneyTrade>();
+        _moneyCounter = FindAnyObjectByType<MoneyCounter>();
         Cursor.lockState = CursorLockMode.Locked;
     }
     void Start()
@@ -42,6 +49,15 @@ public class FPSController : MonoBehaviour
     {
         //デリゲート解除
         _pauseGame.OnPauseResume -= PauseResume;
+    }
+
+    public void Damage()
+    {
+        _playerHp += 1;
+        if (_playerHp != 4)
+        {
+            _hpText[_playerHp - 1].SetActive(false);
+        }
     }
 
     void PauseResume(bool isPause)
@@ -90,6 +106,18 @@ public class FPSController : MonoBehaviour
                 Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
                 Vector3 vector3 = _muzzle.transform.position - _camera.transform.position;
                 ballRigidbody.AddForce(vector3 * 1000);
+            }
+        }
+        if (_playerHp >= 4)
+        {
+            _playerHp = 0;
+            for (int i = 0; i < _hpText.Length; i++)
+            {
+                _hpText[i].SetActive(true);
+            }
+            if (_moneyCounter._money != 0)
+            {
+                _moneyCounter.MoneyValueChange(-1);
             }
         }
     }

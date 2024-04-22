@@ -10,13 +10,15 @@ public class EnemySpawnController : MonoBehaviour
     [SerializeField] List<GameObject> _enemyList = new List<GameObject>();
     [SerializeField] Vector2 _xpos;
     [SerializeField] Vector2 _ypos;
+    [SerializeField] Vector2 _intervalRandomValue;
+    float _intervalRandom = 0;  //ランダムなインターバルの時間を入れる変数
     Vector3 _randomPos = default;
-    [SerializeField] float _spawnInterval = 5;
     bool _timerStop = false;
     float _timer = 0;
     bool _spawnSwitch = true;
     void Awake()
     {
+        IntervalRandom();
         _pauseGame = FindAnyObjectByType<PauseGame>();
         _moneyTrade = FindAnyObjectByType<MoneyTrade>();
         _timer = 5;
@@ -52,13 +54,17 @@ public class EnemySpawnController : MonoBehaviour
         _timer += Time.deltaTime;
         if (!_timerStop)
         {
-            if (_timer > _spawnInterval)
+            if (_timer > _intervalRandom)
             {
                 Instantiate(_enemyList[_moneyTrade._consumeMoney[1]], transform.position, Quaternion.identity);
                 _timer = 0;
                 RandomPos();
             }
         }
+    }
+    public void IntervalRandom()
+    {
+        _intervalRandom = Random.Range(_intervalRandomValue.x,_intervalRandomValue.y);
     }
 
     public void SpawnSwitchChange()

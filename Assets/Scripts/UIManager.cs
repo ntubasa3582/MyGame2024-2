@@ -3,6 +3,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject[] _pausePanel = default;
+    [SerializeField] GameObject[] _nextBuyText = default;
     PauseGame _pauseGame;
     void Awake()
     {

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,11 +20,12 @@ public class EnemyController : MonoBehaviour
         _pauseGame = FindAnyObjectByType<PauseGame>();
         _animator = GetComponent<Animator>();
         _enemySpawnController = GameObject.FindAnyObjectByType<EnemySpawnController>();
-        _player = GameObject.FindGameObjectWithTag("Player");
+        _player = GameObject.FindGameObjectWithTag("Point");
+        _hpSlider.maxValue = _hp;
+        _hpSlider.value = _hp;
     }
     private void Start()
     {
-        _hpSlider.maxValue = _hp;
     }
 
     private void OnEnable()
@@ -66,21 +68,23 @@ public class EnemyController : MonoBehaviour
         if (!_enemyMoveStop)
         {
             transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _moveSpeed);
-        transform.LookAt(_player.transform.position);
+            transform.LookAt(_player.transform.position);
         }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Bullet")
         {
-            _enemyMoveStop = true;
             BulletController _bullet = default;
             _bullet = other.gameObject.GetComponent<BulletController>();
             _hp -= _bullet._enemyDamage;
-            _hpSlider.DOValue(_hp, 0.1f).OnComplete(()=> _enemyMoveStop = false);
+            _hpSlider.DOValue(_hp, 0.1f);
         }
         if (other.gameObject.tag == "Player")
         {
+            FPSController _fpscon = default;
+            _fpscon = other.gameObject.GetComponent<FPSController>();
+            _fpscon.Damage();
             Destroy(gameObject);
         }
     }
