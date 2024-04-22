@@ -5,7 +5,7 @@ public class MoneyCounter : MonoBehaviour
 {
     //Moneyを管理するスクリプト
     [SerializeField] Text _moneyText = default; 
-    public int _money { get;private set; }
+    public int _money { get;private set; } = 0;
     private void Start()
     {
         //ゲーム開始時に_moneyをテキストに反映させる

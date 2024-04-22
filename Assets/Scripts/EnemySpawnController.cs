@@ -1,20 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawnController : MonoBehaviour
 {
     //エネミーの生成を管理するスクリプト
+    MoneyTrade _moneyTrade = null;
     PauseGame _pauseGame;
     [SerializeField] GameObject _enemy = default;
+    [SerializeField] List<GameObject> _enemyList = new List<GameObject>();
     [SerializeField] Vector2 _xpos;
     [SerializeField] Vector2 _ypos;
     Vector3 _randomPos = default;
-    //[SerializeField] float _spawnInterval = 0;
+    [SerializeField] float _spawnInterval = 5;
     bool _timerStop = false;
-    //float _timer = 0;
+    float _timer = 0;
     bool _spawnSwitch = true;
     void Awake()
     {
         _pauseGame = FindAnyObjectByType<PauseGame>();
+        _moneyTrade = FindAnyObjectByType<MoneyTrade>();
+        _timer = 5;
     }
 
     private void OnEnable()
@@ -44,18 +49,14 @@ public class EnemySpawnController : MonoBehaviour
 
     void Update()
     {
+        _timer += Time.deltaTime;
         if (!_timerStop)
         {
-            if (_spawnSwitch)
+            if (_timer > _spawnInterval)
             {
-                //_timer = 0;
+                Instantiate(_enemyList[_moneyTrade._consumeMoney[1]], transform.position, Quaternion.identity);
+                _timer = 0;
                 RandomPos();
-                Instantiate(_enemy, transform.position, Quaternion.identity);
-                _spawnSwitch = false;
-                //_timer += Time.deltaTime;
-                //if (_timer > _spawnInterval)
-                //{
-                //}
             }
         }
     }

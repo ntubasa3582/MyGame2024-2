@@ -6,9 +6,10 @@ public class MoneyTrade : MonoBehaviour
     MoneyCounter _moneyCounter;
     FPSController _fpsController;
     [SerializeField] List<int> _bulletBuyPrice = new List<int>();   //弾を交換する時に必要な金の量を入れる変数
+    [SerializeField] List<int> _enemyBuyPrice = new List<int>();    //エネミーを交換する時必要な金の量を入れる変数
 
 
-    int[] _consumeMoney = new int[1];  //何番目と取引しているかを記録するカウント
+    public int[] _consumeMoney {get;private set; } = new int[5];  //何番目と取引しているかを記録するカウント
     //0 _bulletBuyPriceのカウント
     void Awake()
     {
@@ -26,7 +27,14 @@ public class MoneyTrade : MonoBehaviour
         {
             _moneyCounter.MoneyValueChange(-_bulletBuyPrice[_consumeMoney[0]]); //_moneyを_bulletBuyPrice分マイナスする
             _consumeMoney[0] += 1;  //カウントを1増やす
-            _fpsController.BulletCountUp(_consumeMoney[0]); //bulletのカウントを1増やしてアップグレードする
+        }
+    }
+    public void EnemyUpGrade()
+    {
+        if (_moneyCounter._money >= _enemyBuyPrice[_consumeMoney[1]])
+        {
+            _moneyCounter.MoneyValueChange(-_enemyBuyPrice[_consumeMoney[1]]); //_moneyを_bulletBuyPrice分マイナスする
+            _consumeMoney[1] += 1;  //カウントを1増やす
         }
     }
 }

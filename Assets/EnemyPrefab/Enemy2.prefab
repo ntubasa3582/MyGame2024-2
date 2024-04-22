@@ -483,7 +483,7 @@ Animator:
   m_GameObject: {fileID: 2458347204110816918}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 1bb511c8a05be7d4aab86bc7439e73f3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 020683beeec440dbad4cb5ded3893786, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -528,8 +528,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpSlider: {fileID: 6628017759354266933}
-  _hp: 100
-  _deathGetMoney: 100
+  _hp: 5
+  _moveSpeed: 0.04
+  _deathGetMoney: 2
 --- !u!1 &2509039061955535457
 GameObject:
   m_ObjectHideFlags: 0
