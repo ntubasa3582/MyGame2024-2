@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpSlider: {fileID: 739512007175925399}
-  _hp: 75
+  _hp: 130
   _moveSpeed: 0.03
   _deathGetMoney: 50
 --- !u!1 &8713854742919507416

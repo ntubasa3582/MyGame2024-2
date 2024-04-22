@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FPSController : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class FPSController : MonoBehaviour
     [SerializeField] float Xsensityvity = 3f, Ysensityvity = 3f;    //視点の感度
     [SerializeField] float _speed = 0.1f;    //プレイヤーの移動速度
     [SerializeField] GameObject[] _hpText = new GameObject[3];
+    [SerializeField] Text _comboText = default;
+    public int _killCount { get; private set; } = 0;
     //bool _isGround = true;  //着地判定
     bool _isPlayerMove = false; //プレイヤーの移動を制限する
 
@@ -58,6 +61,8 @@ public class FPSController : MonoBehaviour
         {
             _hpText[_playerHp - 1].SetActive(false);
         }
+        _killCount = 0;
+        _comboText.text = _killCount.ToString();
     }
 
     void PauseResume(bool isPause)
@@ -133,6 +138,12 @@ public class FPSController : MonoBehaviour
             float verticalVelocity = _rb.velocity.y;
             _rb.velocity = _pos * _speed + Vector3.up * verticalVelocity;
         }
+    }
+
+    public void KillCountUp(int value)
+    {
+        _killCount += value;
+        _comboText.text = _killCount.ToString();
     }
 
     //角度制限関数の作成

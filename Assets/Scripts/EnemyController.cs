@@ -59,9 +59,29 @@ public class EnemyController : MonoBehaviour
     {
         if (_hp <= 0 && _hpSlider.value <= 0)
         {
-            _moneyCounter = FindAnyObjectByType<MoneyCounter>();
-            _moneyCounter.MoneyValueChange(_deathGetMoney);
-            //_enemySpawnController.SpawnSwitchChange();
+            FPSController fPSController = default;
+            fPSController = GameObject.FindAnyObjectByType<FPSController>();
+            _moneyCounter = GameObject.FindAnyObjectByType<MoneyCounter>();
+            fPSController.KillCountUp(1);
+            switch (fPSController._killCount)
+            {
+                case <0:
+                    _moneyCounter.MoneyValueChange(_deathGetMoney);
+                    break;
+                case <10:
+                    _moneyCounter.MoneyValueChange(_deathGetMoney*1.1f);
+                    break;
+                case <50:
+                    _moneyCounter.MoneyValueChange(_deathGetMoney*1.5f);
+                    break;
+                case <100:
+                    _moneyCounter.MoneyValueChange(_deathGetMoney*2f);
+                    break;
+                case <500:
+                    _moneyCounter.MoneyValueChange(_deathGetMoney*3f);
+                    break;
+
+            }
             Destroy(gameObject);
         }
         transform.LookAt(_player.transform.position);
